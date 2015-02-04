@@ -4,8 +4,7 @@
 
 with open("students.txt", mode="w", encoding="utf-8") as students:
         
-    students.write("John")
-    students.write("Isabella")
+    students.write("John\nIsabella")
 
 with open("students.txt", mode="r", encoding="utf-8") as students:
     for name in students:
