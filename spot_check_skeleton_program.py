@@ -2,7 +2,7 @@
 #03/03/2015
 #Files and records spot check game database progam
 
-#import pdb
+import pickle
 
 class blank_game_record:
     def __init__(self):
@@ -13,39 +13,40 @@ class blank_game_record:
         self.number_of_players = None
         self.online_functionality = None
 
-def load_games(filename):
-    open(filename, mode="a",encoding="utf-8") game_data:
-        main()
+def load_games():
+    with open("game database.dat", mode="rb") as game_database:
+        games = pickle.load(game_database)
+        return games
 
-def save_games(filename, games):
-    open(filename, mode="w", encoding="utf-8") as game_data:
-        game_data.write(games)
+def save_games(games):
+    with open("game database.dat", mode="wb") as game_database:
+        pickle.dump(games,game_database)
 
 #the parameter is games because eventually you will be displaying
 #multiple games using this function
 def display_games(games):
-    print ("_"*43)
-    print ("|{0:<20}|{1:<11}|{2:<13}|{3:<5}|{4:<17}|{5<20}|".format("Name", "Paltform", "Genre", "Cost", "Number of players", "Online functionality"))
-    print ("_"*43)
+    print ("_"*93)
+    print ("|{0:<20}|{1:<11}|{2:<13}|{3:<5}|{4:<17}|{5:<20}|".format("Name", "Platform", "Genre", "Cost", "Number of players", "Online functionality"))
+    print ("_"*93)
+    line = blank_game_record()
     for line in games:
-        print ("|{0:<20}|{1:<11}|{2:<13}|{3:<5}|{4:<17}|{5<20}|".format(line.name, line.paltform, line.genre, line.cost, line.number_of_players, line.online_functionality))
-        print ("_"*43)
+        print ("|{0:<20}|{1:<11}|{2:<13}|{3:<5}|{4:<17}|{5:<20}|".format(line.name, line.platform, line.genre, line.cost, line.number_of_players, line.online_functionality))
+        print ("_"*93)
     
     
 
-def get_game_from_user():
-    #pdb.set_trace()
-    games = []
-    while game == -1:
+def get_game_from_user(games):
+    game = True
+    while game:
         game_record = blank_game_record()
-        name = input("Please enter the name of the game: ")
-        if name == -1:
-            game = -1
+        name = input("Please enter the name of the game(-1 to end list): ")
+        if name == "-1":
+            game = False
         else:
             platform = input("Please enter the platform of the game(e.g. XBox, PlayStation, PC etc.): ")
             genre = input("Please enter the genre of the game: ")
             cost = input("Please enter the cost of the game: £ ")
-            number_of_players = int(input("Please enter the nunber of players in the game: "))
+            number_of_players = input("Please enter the nunber of players in the game: ")
             online_funcionality = input("Please enter the online funcionality of the game(i.e. if it has online funcionality or not): ")
             game_record.name = name
             game_record.platform = platform
@@ -66,18 +67,18 @@ def display_menu():
     print()
 
 def main():
+    games = load_games()
     exit_program = False
     while not exit_program:
         display_menu()
         selected_option = int(input("Please select a menu option: "))
         if selected_option == 1:
-           games = get_game_from_user()
+            games = get_game_from_user(games)
         elif selected_option == 2:
             display_games(games)
         elif selected_option == 3:
-            filename = "game_databace.txt"
-            save_games(filename, games)
-            exit_prigram = True
+            save_games(games)
+            exit_program = True
         else:
             print("Please enter a valid option (1-3)")
             print()
