@@ -14,9 +14,12 @@ class blank_game_record:
         self.online_functionality = None
 
 def load_games():
-    with open("game database.dat", mode="rb") as game_database:
-        games = pickle.load(game_database)
-        return games
+    try:
+        with open("game database.dat", mode="rb") as game_database:
+            games = pickle.load(game_database)
+    except FileNotFoundError:
+        games = []
+    return games  
 
 def save_games(games):
     with open("game database.dat", mode="wb") as game_database:
@@ -66,12 +69,20 @@ def display_menu():
     print("3. Exit program")
     print()
 
+def what_number():
+    try:
+        selected_option = int(input("Please select a menu option: "))
+    except ValueError:
+        print("This is not a number plases enter the number 1, 2 or 3")
+        selected_option = what_number()
+    return selected_option
+
 def main():
     games = load_games()
     exit_program = False
     while not exit_program:
         display_menu()
-        selected_option = int(input("Please select a menu option: "))
+        selected_option = what_number()
         if selected_option == 1:
             games = get_game_from_user(games)
         elif selected_option == 2:
@@ -82,6 +93,7 @@ def main():
         else:
             print("Please enter a valid option (1-3)")
             print()
+    
 
 if __name__ == "__main__":
     main()
